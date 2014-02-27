@@ -1,0 +1,24 @@
+{
+	"name": "Fishy",
+	"private": true,
+	"version": "0.0.1",
+	"description": "A game.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ilanbiala/fishy.git"
+	},
+	"bugs": {
+		"url": "https://github.com/ilanbiala/fishy/issues"
+	},
+	"contributors": [{
+		"name": "Ilan Biala",
+		"email": "ilan.biala@gmail.com"
+	}, {
+		"name": "Edward Kennedy"
+	}],
+	"dependencies": {},
+	"devDependencies": {},
+	"scripts": {
+		"test": ""
+	}
+}
