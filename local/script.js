@@ -8,7 +8,7 @@ var jqCanvas,
 		40: false
 	},
 	fish;
-var fishSymbolArray = ['assets/images/fish1.png', 'fish2.png', 'fish3.png', 'fish4.png'];
+var fishSymbolArray = ['fish1.png', 'fish2.png', 'fish3.png', 'fish4.png'];
 
 $(document).ready(function () {
 	jqCanvas = $('canvas');
