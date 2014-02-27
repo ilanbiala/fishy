@@ -64,15 +64,15 @@ Fish.prototype.move = function (key) {
 		console.log('speed: ' + this.maxSpeed + ', acceleration: ' + this.acceleration + ', deceleration: ' + this.deceleration);
 	}
 	if (key === 37) { // left key
-		this.xSpeed = Math.max(-this.maxSpeed, this.xSpeed - this.acceleration); // Increase speed unless at max
+		this.xSpeed = Math.max(-this.maxSpeed-this.deceleration, this.xSpeed - this.acceleration); // Increase speed unless at max
 		this.orientation = 0;
 	} else if (key === 38) { // up key
-		this.ySpeed = Math.max(-this.maxSpeed, this.ySpeed - this.acceleration); // Increase speed unless at max
+		this.ySpeed = Math.max(-this.maxSpeed-this.deceleration, this.ySpeed - this.acceleration); // Increase speed unless at max
 	} else if (key === 39) { // right key
-		this.xSpeed = Math.min(this.maxSpeed, this.xSpeed + this.acceleration); // Increase speed unless at max
+		this.xSpeed = Math.min(this.maxSpeed+this.deceleration, this.xSpeed + this.acceleration); // Increase speed unless at max
 		this.orientation = 1;
 	} else if (key === 40) { // down key
-		this.ySpeed = Math.min(this.maxSpeed, this.ySpeed + this.acceleration); // Increase speed unless at max
+		this.ySpeed = Math.min(this.maxSpeed+this.deceleration, this.ySpeed + this.acceleration); // Increase speed unless at max
 	}
 	console.log('xSpeed: ' + this.xSpeed);
 	//Decelerate horizontal
