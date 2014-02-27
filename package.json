@@ -3,6 +3,7 @@
 	"private": true,
 	"version": "0.0.1",
 	"description": "A game.",
+	"main": "index.html",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/ilanbiala/fishy.git"
