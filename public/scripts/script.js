@@ -5,7 +5,8 @@ var jqCanvas,
 		37: false,
 		38: false,
 		39: false,
-		40: false
+		40: false,
+		lastKey: null
 	},
 	fish;
 var fishSymbolArray = ['/images/fish1.png', '/images/fish2.png', '/images/fish3.png', '/images/fish4.png'];
@@ -21,6 +22,7 @@ $(document).ready(function () {
 		if (e.which === 37 || e.which === 38 || e.which === 39 || e.which === 40) {
 			fish.move(e.which);
 			keysPressed[e.which] = true;
+			keysPressed.lastKey = e.which;
 		}
 	}).on('keyup', function (e) {
 		if (e.which in keysPressed) {
@@ -28,6 +30,7 @@ $(document).ready(function () {
 		}
 	});
 	// setInterval(render, 100);
+	renderCanvas();
 });
 
 function Fish() {
@@ -58,7 +61,6 @@ Fish.prototype.toString = function () {
 };
 
 Fish.prototype.move = function (key) {
-
 	if (this.drawn) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	} else {
@@ -76,7 +78,6 @@ Fish.prototype.move = function (key) {
 	} else if (key === 40) { // down key
 		this.ySpeed = Math.min(this.maxSpeed, this.ySpeed + this.acceleration); // Increase speed unless at max
 	}
-	console.log('xSpeed: ' + this.xSpeed);
 	//Decelerate horizontal
 	if (this.xSpeed <= 0) {
 		this.xSpeed = Math.min(0, this.xSpeed + this.deceleration); // If speed is negative, add deceleration value until 0
@@ -89,9 +90,12 @@ Fish.prototype.move = function (key) {
 	} else {
 		this.ySpeed = Math.max(0, this.ySpeed - this.deceleration); // If speed is positive, subtract deceleration value until 0	
 	}
-	console.log('xSpeed: ' + this.xSpeed);
 	this.position.x += Math.round(this.xSpeed); //Set new xCoord
 	this.position.y += Math.round(this.ySpeed); //Set new yCoord
 	console.log(this.position.x + ', ' + this.position.y);
-	ctx.drawImage(this.symbol, this.position.x, this.position.y);
 };
+
+function renderCanvas() {
+	ctx.drawImage(fish.symbol, fish.position.x, fish.position.y);
+	requestAnimationFrame(renderCanvas);
+}
