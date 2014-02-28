@@ -13,6 +13,8 @@ var fishSymbolArray = ['/images/fish1.png', '/images/fish2.png', '/images/fish3.
 $(document).ready(function () {
 	jqCanvas = $('canvas');
 	canvas = jqCanvas[0];
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 	ctx = canvas.getContext('2d');
 	fish = new Fish();
 	$(document).on('keydown', function (e) {
