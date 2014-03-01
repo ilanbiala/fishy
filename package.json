@@ -17,7 +17,7 @@
 		"name": "Edward Kennedy"
 	}],
 	"scripts": {
-		"postinstall": "bower install",
+		"postinstall": "node node_modules/bower/bin/bower install",
 		"start": "node app.js",
 		"test": ""
 	},
