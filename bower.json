@@ -16,16 +16,15 @@
 	}, {
 		"name": "Edward Kennedy"
 	}],
-	"scripts": {
-		"postinstall": "bower install",
-		"start": "node app.js",
-		"test": ""
-	},
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"public/lib",
+		"test",
+		"tests"
+	],
 	"dependencies": {
-		"express": "~3.4.8",
-		"ejs": "~0.8.5",
-		"stylus": "~0.42.2",
-		"bower": "~1.2.8"
-	},
-	"devDependencies": {}
+		"jquery": "~2.1.0"
+	}
 }
