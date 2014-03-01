@@ -21,8 +21,10 @@
 		"test": ""
 	},
 	"dependencies": {
-		"express": "3.4.8",
-		"ejs": "*",
-		"stylus": "*"
-	}
+		"express": "~3.4.8",
+		"ejs": "~0.8.5",
+		"stylus": "~0.42.2",
+		"bower": "~1.2.8"
+	},
+	"devDependencies": {}
 }
