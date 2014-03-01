@@ -95,7 +95,14 @@ Fish.prototype.move = function (key) {
 	console.log(this.position.x + ', ' + this.position.y);
 };
 
+function clearCanvas(context, canvas) {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function renderCanvas() {
+	clearCanvas(ctx, canvas);
+	fish.position.x += Math.round(fish.xSpeed); // new xCoord
+	fish.position.y += Math.round(fish.ySpeed); // new yCoord
 	ctx.drawImage(fish.symbol, fish.position.x, fish.position.y);
 	requestAnimationFrame(renderCanvas);
 }

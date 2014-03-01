@@ -5,20 +5,24 @@ var jqCanvas,
 		37: false,
 		38: false,
 		39: false,
-		40: false
+		40: false,
+		lastKey: null
 	},
 	fish;
-var fishSymbolArray = ['fish1.png', 'fish2.png', 'fish3.png', 'fish4.png'];
+var fishSymbolArray = ['/images/fish1.png', '/images/fish2.png', '/images/fish3.png', '/images/fish4.png'];
 
 $(document).ready(function () {
 	jqCanvas = $('canvas');
 	canvas = jqCanvas[0];
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 	ctx = canvas.getContext('2d');
 	fish = new Fish();
 	$(document).on('keydown', function (e) {
 		if (e.which === 37 || e.which === 38 || e.which === 39 || e.which === 40) {
 			fish.move(e.which);
 			keysPressed[e.which] = true;
+			keysPressed.lastKey = e.which;
 		}
 	}).on('keyup', function (e) {
 		if (e.which in keysPressed) {
@@ -26,6 +30,7 @@ $(document).ready(function () {
 		}
 	});
 	// setInterval(render, 100);
+	renderCanvas();
 });
 
 function Fish() {
@@ -56,7 +61,6 @@ Fish.prototype.toString = function () {
 };
 
 Fish.prototype.move = function (key) {
-
 	if (this.drawn) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	} else {
@@ -64,17 +68,16 @@ Fish.prototype.move = function (key) {
 		console.log('speed: ' + this.maxSpeed + ', acceleration: ' + this.acceleration + ', deceleration: ' + this.deceleration);
 	}
 	if (key === 37) { // left key
-		this.xSpeed = Math.max(-this.maxSpeed, this.xSpeed - this.acceleration) - this.deceleration; // Increase speed unless at max
+		this.xSpeed = Math.max(-this.maxSpeed, this.xSpeed - this.acceleration); // Increase speed unless at max
 		this.orientation = 0;
 	} else if (key === 38) { // up key
-		this.ySpeed = Math.max(-this.maxSpeed, this.ySpeed - this.acceleration) - this.deceleration; // Increase speed unless at max
+		this.ySpeed = Math.max(-this.maxSpeed, this.ySpeed - this.acceleration); // Increase speed unless at max
 	} else if (key === 39) { // right key
-		this.xSpeed = Math.min(this.maxSpeed, this.xSpeed + this.acceleration) + this.deceleration; // Increase speed unless at max
+		this.xSpeed = Math.min(this.maxSpeed, this.xSpeed + this.acceleration); // Increase speed unless at max
 		this.orientation = 1;
 	} else if (key === 40) { // down key
-		this.ySpeed = Math.min(this.maxSpeed, this.ySpeed + this.acceleration) + this.deceleration; // Increase speed unless at max
+		this.ySpeed = Math.min(this.maxSpeed, this.ySpeed + this.acceleration); // Increase speed unless at max
 	}
-	console.log('xSpeed: ' + this.xSpeed);
 	//Decelerate horizontal
 	if (this.xSpeed <= 0) {
 		this.xSpeed = Math.min(0, this.xSpeed + this.deceleration); // If speed is negative, add deceleration value until 0
@@ -87,9 +90,19 @@ Fish.prototype.move = function (key) {
 	} else {
 		this.ySpeed = Math.max(0, this.ySpeed - this.deceleration); // If speed is positive, subtract deceleration value until 0	
 	}
-	console.log('xSpeed: ' + this.xSpeed);
 	this.position.x += Math.round(this.xSpeed); //Set new xCoord
 	this.position.y += Math.round(this.ySpeed); //Set new yCoord
 	console.log(this.position.x + ', ' + this.position.y);
-	ctx.drawImage(this.symbol, this.position.x, this.position.y);
 };
+
+function clearCanvas(context, canvas) {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function renderCanvas() {
+	clearCanvas(ctx, canvas);
+	fish.position.x += Math.round(fish.xSpeed); // new xCoord
+	fish.position.y += Math.round(fish.ySpeed); // new yCoord
+	ctx.drawImage(fish.symbol, fish.position.x, fish.position.y);
+	requestAnimationFrame(renderCanvas);
+}
