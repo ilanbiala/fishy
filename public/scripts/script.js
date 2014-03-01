@@ -71,22 +71,23 @@ Fish.prototype.move = function () {
 		this.drawn = !this.drawn;
 		console.log('speed: ' + this.maxSpeed + ', acceleration: ' + this.acceleration + ', deceleration: ' + this.deceleration);
 	}
+
 	if (keysPressed[37]) { // left key
-		this.xSpeed = Math.max(-this.maxSpeed, this.xSpeed - this.acceleration); // Increase speed unless at max
-		this.orientation = 0; // face fish left
+		this.xSpeed = Math.max(-this.maxSpeed - this.deceleration, this.xSpeed - this.acceleration - this.deceleration); // Increase speed unless at max
+		this.orientation = 0;
 	}
 	if (keysPressed[38]) { // up key
-		this.ySpeed = Math.max(-this.maxSpeed, this.ySpeed - this.acceleration); // Increase speed unless at max
+		this.ySpeed = Math.max(-this.maxSpeed - this.deceleration, this.ySpeed - this.acceleration - this.deceleration); // Increase speed unless at max
 	}
 	if (keysPressed[39]) { // right key
-		this.xSpeed = Math.min(this.maxSpeed, this.xSpeed + this.acceleration); // Increase speed unless at max
-		this.orientation = 1; // face fish right
+		this.xSpeed = Math.min(this.maxSpeed + this.deceleration, this.xSpeed + this.acceleration + this.deceleration); // Increase speed unless at max
+		this.orientation = 1;
 		// if (this.orientation == 1) {
-		// 	this.symbol.style.webkitTransform = 'rotateY(180deg)';
+		// this.symbol.style.webkitTransform = 'rotateY(180deg)';
 		// }
 	}
 	if (keysPressed[40]) { // down key
-		this.ySpeed = Math.min(this.maxSpeed, this.ySpeed + this.acceleration); // Increase speed unless at max
+		this.ySpeed = Math.min(this.maxSpeed + this.deceleration, this.ySpeed + this.acceleration + this.deceleration); // Increase speed unless at max
 	}
 	//Decelerate horizontal
 	if (this.xSpeed <= 0) {
