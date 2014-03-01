@@ -71,9 +71,19 @@ Fish.prototype.move = function () {
 	} else {
 		this.ySpeed = Math.max(0, this.ySpeed - this.deceleration); // If speed is positive, subtract deceleration value until 0	
 	}
+
 	this.position.x += Math.round(this.xSpeed); //Set new xCoord
 	this.position.y += Math.round(this.ySpeed); //Set new yCoord
-	// console.log(this.position.x + ', ' + this.position.y);
+	// if (this.position.x <= 0) {
+	// 	this.position.x = 0;
+	// } else if (this.position.x >= 0) {
+	// 	this.position.x = 0;
+	// }
+	if (this.position.y <= 0) {
+		this.position.y = 0;
+	} else if (this.position.y + 175 >= canvas.height) {
+		this.position.y = canvas.height - 175;
+	}
 };
 
 function checkMove() {
