@@ -1,4 +1,6 @@
 var fishSymbolArray = ['/images/fish1.png', '/images/fish2.png', '/images/fish3.png', '/images/fish4.png'];
+var enemies = [];
+var cleaningFish = false;
 
 function Fish() {
 	this.mass = Math.floor(Math.random() * 3 + 3); // 3 -> 6
@@ -13,15 +15,15 @@ function Fish() {
 	this.position = {
 		// x: Math.floor(Math.random() * 2) * canvas.width, // 0 = left, 1 = right
 		// y: Math.floor(Math.random() * canvas.height) // 0 -> 100, high == higher up the screen
-		x: Math.floor(Math.random() * 2), // 0 = left, 1 = right
-		y: Math.floor(Math.random() * 101) // 0 -> 100, high == higher up the screen
+		x: Math.floor(Math.random() * 275 + 25), // 25 -> 300,
+		y: Math.floor(Math.random() * 475 + 25) // 25 -> 500, high == lower down the screen
 	};
-	this.orientation = !this.position.x; // start fish going to center of screen
+	this.orientation = Math.floor(Math.random()); // start fish going to center of screen
 	this.moveLeft = false;
 	this.moveRight = false;
 	this.moveUp = false;
 	this.moveDown = false;
-};
+}
 
 Fish.prototype.toString = function () {
 	var propString = '';
@@ -74,17 +76,42 @@ Fish.prototype.move = function () {
 
 	this.position.x += Math.round(this.xSpeed); //Set new xCoord
 	this.position.y += Math.round(this.ySpeed); //Set new yCoord
-	// if (this.position.x <= 0) {
-	// 	this.position.x = 0;
-	// } else if (this.position.x >= 0) {
-	// 	this.position.x = 0;
-	// }
+	if (this.position.x < 0) {
+		this.position.x = canvas.width;
+	} else if (this.position.x >= canvas.width + 50) {
+		this.position.x = 0;
+	}
 	if (this.position.y <= 0) {
 		this.position.y = 0;
 	} else if (this.position.y + 175 >= canvas.height) {
 		this.position.y = canvas.height - 175;
 	}
 };
+
+Fish.prototype.swim = function () {
+	this.position.x += Math.random() * 8 + 1; // 1 -> 15
+};
+
+function spawnFish() {
+	var numberOfFish = Math.random() * 15 + 1; // 1 -> 20
+	while (numberOfFish >= 0) {
+		if (numberOfFish % 3 === 0) {
+			$.delay(200);
+			enemies.push(new Fish());
+		} else {
+			enemies.push(new Fish());
+		}
+		numberOfFish--;
+	}
+}
+
+function cleanFish() {
+	for (var i = 0; i < enemies.length; i++) {
+		if (enemies[i].position.x > (canvas.width + 1000)) {
+			enemies.splice(i);
+		}
+	}
+}
 
 function checkMove() {
 	fish.moveLeft = keysPressed[37];

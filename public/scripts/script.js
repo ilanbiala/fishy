@@ -30,5 +30,6 @@ $(document).ready(function () {
 		}
 	});
 	ctx = canvas.getContext('2d');
+	setInterval(spawnFish, 1800);
 	renderCanvas();
 });
