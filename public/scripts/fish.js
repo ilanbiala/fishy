@@ -1,7 +1,8 @@
 var fishSymbolArray = ['/images/fish1.png', '/images/fish2.png', '/images/fish3.png', '/images/fish4.png'];
 var enemies = [];
 var cleaningFish = false;
-
+var maxDumbFish = 20; //Maximum number of computer-controlled, non-chasing fish
+var numberOfFish = 0;
 function Fish() {
 	this.mass = Math.floor(Math.random() * 3 + 3); // 3 -> 6
 	this.acceleration = Math.floor(10 - Math.random() * this.mass); // 4 -> 9
@@ -93,15 +94,10 @@ Fish.prototype.swim = function () {
 };
 
 function spawnFish() {
-	var numberOfFish = Math.random() * 15 + 1; // 1 -> 20
-	while (numberOfFish >= 0) {
-		if (numberOfFish % 3 === 0) {
-			$.delay(200);
-			enemies.push(new Fish());
-		} else {
-			enemies.push(new Fish());
-		}
-		numberOfFish--;
+	if (Math.floor(Math.random() * 10) === 0 && numberOfFish < maxDumbFish) //1 in 10 chance
+    {
+        enemies.push(new Fish());
+		numberOfFish++;
 	}
 }
 
@@ -109,6 +105,7 @@ function cleanFish() {
 	for (var i = 0; i < enemies.length; i++) {
 		if (enemies[i].position.x > (canvas.width + 1000)) {
 			enemies.splice(i);
+            numberOfFish--;
 		}
 	}
 }
