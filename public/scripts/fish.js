@@ -109,7 +109,7 @@ function cleanFish() {
 
 Fish.prototype.hunt = function () {
 	//"Smarter" movement for the enemy fish; rather than moving at 45 or 90 degree angles, it finds a vector that'll make a straight path towards the fish
-	//Todo: declutter, fix moving towards x or y negative being faster than maxSpeed, re-check math equations & logic
+	//Todo: declutter, re-check math equations & logic
 	var dX = fish.position.x - this.position.x; //difference in X between enemy and fish
 	var dY = fish.position.y - this.position.y; //difference in Y between enemy and fish
 	var dLin = Math.sqrt(Math.pow(dY, 2) + Math.pow(dX, 2));
@@ -141,7 +141,7 @@ Fish.prototype.hunt = function () {
 			}
 			//Decelerate horizontal
 			if (this.xSpeed <= 0) {
-				this.xSpeed = Math.min(0, this.xSpeed + (dX / dLin) * this.deceleration); // If speed is negative, add deceleration value until 0
+				this.xSpeed = Math.min(0, this.xSpeed - (dX / dLin) * this.deceleration); // If speed is negative, add deceleration value until 0
 			} else {
 				this.xSpeed = Math.max(0, this.xSpeed - (dX / dLin) * this.deceleration); // If speed is positive, subtract deceleration value until 0
 			}
@@ -167,7 +167,7 @@ Fish.prototype.hunt = function () {
 			}
 			//Decelerate vertical
 			if (this.ySpeed <= 0) {
-				this.ySpeed = Math.min(0, this.ySpeed + (dY / dLin) * this.deceleration); // If speed is negative, add deceleration value until 0
+				this.ySpeed = Math.min(0, this.ySpeed - (dY / dLin) * this.deceleration); // If speed is negative, add deceleration value until 0
 			} else {
 				this.ySpeed = Math.max(0, this.ySpeed - (dY / dLin) * this.deceleration); // If speed is positive, subtract deceleration value until 0
 			}
