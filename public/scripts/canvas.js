@@ -5,10 +5,9 @@
 // }
 
 function renderCanvas() {
-	checkMove();
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	fish.move();
-	enemyFish.move();
+	enemyFish.hunt();
 	ctx.drawImage(fish.symbol, fish.position.x, fish.position.y);
 	ctx.drawImage(enemyFish.symbol, enemyFish.position.x, enemyFish.position.y);
 	for (var i = 0; i < enemies.length; i++) {

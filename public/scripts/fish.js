@@ -20,10 +20,6 @@ function Fish() {
 		y: Math.floor(Math.random() * 475 + 25) // 25 -> 500, high == lower down the screen
 	};
 	this.orientation = Math.floor(Math.random()); // start fish going to center of screen
-	this.moveLeft = false;
-	this.moveRight = false;
-	this.moveUp = false;
-	this.moveDown = false;
 }
 
 Fish.prototype.toString = function () {
@@ -45,21 +41,21 @@ Fish.prototype.move = function () {
 		console.log('speed: ' + this.maxSpeed + ', acceleration: ' + this.acceleration + ', deceleration: ' + this.deceleration);
 	}
 
-	if (this.moveLeft) { // left key
+	if (keysPressed[37]) { // left key
 		this.xSpeed = Math.max(-this.maxSpeed - this.deceleration, this.xSpeed - this.acceleration - this.deceleration); // Increase speed unless at max
 		this.orientation = 0;
 	}
-	if (this.moveUp) { // up key
+	if (keysPressed[38]) { // up key
 		this.ySpeed = Math.max(-this.maxSpeed - this.deceleration, this.ySpeed - this.acceleration - this.deceleration); // Increase speed unless at max
 	}
-	if (this.moveRight) { // right key
+	if (keysPressed[39]) { // right key
 		this.xSpeed = Math.min(this.maxSpeed + this.deceleration, this.xSpeed + this.acceleration + this.deceleration); // Increase speed unless at max
 		this.orientation = 1;
 		// if (this.orientation == 1) {
 		// this.symbol.style.webkitTransform = 'rotateY(180deg)';
 		// }
 	}
-	if (this.moveDown) { // down key
+	if (keysPressed[40]) { // down key
 		this.ySpeed = Math.min(this.maxSpeed + this.deceleration, this.ySpeed + this.acceleration + this.deceleration); // Increase speed unless at max
 	}
 	//Decelerate horizontal
@@ -103,19 +99,105 @@ function spawnFish() {
 
 function cleanFish() {
 	for (var i = 0; i < enemies.length; i++) {
-		if (enemies[i].position.x > (canvas.width + 1000)) {
-			enemies.splice(i);
+		if (enemies[i].position.x > (canvas.width + 250)) {
+			enemies.splice(i,1);
             numberOfFish--;
 		}
 	}
 }
-
+Fish.prototype.hunt = function () {
+    //"Smarter" movement for the enemy fish; rather than moving at 45 or 90 degree angles, it finds a vector that'll make a straight path towards the fish
+    //Todo: declutter, fix moving towards x or y negative being faster than maxSpeed, re-check math equations & logic
+    var dX = fish.position.x - this.position.x; //difference in X between enemy and fish
+    var dY = fish.position.y - this.position.y; //difference in Y between enemy and fish
+    var dLin = Math.sqrt(Math.pow(dY,2)+Math.pow(dX,2));
+    if(dX == 0 && dY == 0)
+    {
+        this.xSpeed = 0;
+        this.ySpeed = 0;
+    }
+    else
+    {
+    if(dX > 0 && this.xSpeed > 0 && dX <= Math.pow(this.xSpeed,2)/(2*(this.deceleration+this.acceleration))) //If the enemyFish is within range to constantly decelerate (both by opposing its current motion and natural deceleration), decelerate until enemyFish gets to 0
+    {
+        this.xSpeed = Math.max(0,this.xSpeed-this.acceleration-this.deceleration);
+    }
+    else if (dX < 0 && this.xSpeed < 0 && Math.abs(dX) <= Math.pow(this.xSpeed,2)/(2*(this.deceleration+this.acceleration))) //Same condition as above, but from the other side
+    {
+        this.xSpeed = Math.min(0,this.xSpeed + this.acceleration + this.deceleration);
+    }
+    else
+    {
+        if(dY == 0) //If y is zero, move purely horizontally
+        {
+            if(dX > 0) this.xSpeed = Math.min(this.maxSpeed + this.deceleration, this.xSpeed + this.acceleration + this.deceleration);
+            if(dX < 0) this.xSpeed = Math.max(-this.maxSpeed-this.deceleration, this.xSpeed - this.acceleration - this.deceleration);
+        }
+        else
+        {
+            if(dX > 0) //If accelerating in the x positive direction
+            {
+                this.xSpeed = Math.min( //Calculate vector's x component, see if max speed or xSpeed + accel is greater in magnitude
+                                       (dX/dLin)*(this.maxSpeed + this.deceleration), //Alter max speed so that xSpeed is the x component of a vector of magnitute maxSpeed at the angle the fish travels along
+                                       this.xSpeed + (dX/dLin)*(this.acceleration + this.deceleration)); //Accelerate x speed by adding the x-component of the target vector
+            }
+            if(dX < 0) //If accelerating in the x negative direction
+            {
+                this.xSpeed = Math.max( //Calculate vector's x component, see if max speed or xSpeed + accel is greater in magnitude
+                                       (dX/dLin)*(this.maxSpeed + this.deceleration), //Alter max speed so that xSpeed is the x component of a vector of magnitute maxSpeed at the angle the fish travels along
+                                       this.xSpeed + (dX/dLin)*(this.acceleration + this.deceleration)); //Accelerate x speed by adding the x-component of the target vector
+            }
+        }
+        //Decelerate horizontal
+        if (this.xSpeed <= 0) {
+            this.xSpeed = Math.min(0, this.xSpeed + (dX/dLin)*this.deceleration); // If speed is negative, add deceleration value until 0
+        } else {
+            this.xSpeed = Math.max(0, this.xSpeed - (dX/dLin)*this.deceleration); // If speed is positive, subtract deceleration value until 0
+        }
+    }
+    if(dY > 0 && this.ySpeed > 0 && dY <= Math.pow(this.ySpeed,2)/(2*(this.deceleration+this.acceleration)))
+    {
+        this.ySpeed = Math.max(0,this.ySpeed-this.acceleration-this.deceleration);
+    }
+    else if (dY < 0 && this.ySpeed < 0 && Math.abs(dY) <= Math.pow(this.ySpeed,2)/(2*(this.deceleration+this.acceleration)))
+    {
+        this.ySpeed = Math.min(0,this.ySpeed + this.acceleration + this.deceleration);
+    }
+    else
+    {
+    if(dX == 0) //If dx is zero, move purely vertically
+    {
+        if(dY > 0) this.ySpeed = Math.min(this.maxSpeed, this.ySpeed + this.acceleration + this.deceleration);
+        if(dY < 0) this.ySpeed = Math.max(-this.maxSpeed, this.ySpeed - this.acceleration - this.deceleration);
+    }
+    else
+    {
+        if(dY > 0) //If accelerating in the y positive direction
+        {
+           this.ySpeed = Math.min( //Calculate vector's Y component, see if max speed or ySpeed + accel is greater in magnitude
+                        (dY/dLin)*(this.maxSpeed + this.deceleration), //Alter max speed so that ySpeed is the y component of a vector of magnitute maxSpeed at the angle the fish travels along
+                        this.ySpeed + (dY/dLin)*(this.acceleration + this.deceleration)); //Accelerate Y speed by adding the y-component of the target vector
+        }
+        if(dY < 0) //If accelerating in the y negative direction
+        {
+            this.ySpeed = Math.max( //Calculate vector's Y component, see if max speed or ySpeed + accel is greater in magnitude
+                                   (dY/dLin)*(this.maxSpeed + this.deceleration), //Alter max speed so that ySpeed is the y component of a vector of magnitute maxSpeed at the angle the fish travels along
+                                   this.ySpeed + (dY/dLin)*(this.acceleration + this.deceleration)); //Accelerate Y speed by adding the y-component of the target vector
+        }
+    }
+    	//Decelerate vertical
+	if (this.ySpeed <= 0) {
+		this.ySpeed = Math.min(0, this.ySpeed + (dY/dLin)*this.deceleration); // If speed is negative, add deceleration value until 0
+	} else {
+		this.ySpeed = Math.max(0, this.ySpeed - (dY/dLin)*this.deceleration); // If speed is positive, subtract deceleration value until 0
+	}
+    }
+    }
+	this.position.x += Math.round(this.xSpeed); //Set new xCoord
+	this.position.y += Math.round(this.ySpeed); //Set new yCoord
+    
+}
 function checkMove() {
-	fish.moveLeft = keysPressed[37];
-	fish.moveUp = keysPressed[38];
-	fish.moveRight = keysPressed[39];
-	fish.moveDown = keysPressed[40];
-	enemyFish.moveLeft = enemyFish.moveUp = enemyFish.moveRight = enemyFish.moveDown = false;
 	if (fish.position.x > enemyFish.position.x) {
 		enemyFish.moveRight = true;
 	} else if (fish.position.x < enemyFish.position.x) {
