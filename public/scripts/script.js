@@ -9,7 +9,8 @@ var canvas,
 		lastKey: null
 	},
 	fish = new Fish(),
-	enemyFish = new Fish();
+	enemyFish = new Fish(),
+	socket = io.connect();
 
 $(document).ready(function () {
 	canvas = $('canvas')[0];
@@ -32,4 +33,21 @@ $(document).ready(function () {
 	ctx = canvas.getContext('2d');
 	setInterval(spawnFish, 1800);
 	renderCanvas();
+	setInterval(function () {
+		if (enemies.length > 0) {
+			var fishArray = enemies[0];
+			fishArray.icon = fishArray.symbol.src;
+			fishArray.symbol = 'abc';
+			socket.emit('update', {
+				enemies: fishArray,
+			});
+		} else {
+			socket.emit('update', {
+				enemies: null,
+			});
+		}
+	}, 250);
+	socket.on('updates', function (data) {
+		console.log(data);
+	});
 });

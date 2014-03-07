@@ -3,8 +3,8 @@
  */
 
 exports.index = function (req, res) {
-	res.render('index', {
-		title: 'Fishy',
 
+	res.render('index', {
+		title: 'Fishy'
 	});
 };

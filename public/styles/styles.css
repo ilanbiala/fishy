@@ -4,7 +4,7 @@ canvas {
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-image: url(http://fourwallsonly.com/wp-content/uploads/2013/12/spongebob-squarepants-ocean-background.jpg);
+	background-image: url(/images/background.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
 }

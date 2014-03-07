@@ -9,8 +9,9 @@ function Fish() {
 	this.deceleration = this.maxSpeed / (11 - this.acceleration); // RANGE GOES HERE
 	this.xSpeed = 0;
 	this.ySpeed = 0;
-	this.symbol = new Image(); // set up the image
-	this.symbol.src = fishSymbolArray[Math.floor(Math.random() * 4)]; // which icon to use
+	this.icon = fishSymbolArray[Math.floor(Math.random() * 4)]; // fish graphic
+	// this.symbol = new Image(); // set up the image
+	// this.symbol.src = fishSymbolArray[Math.floor(Math.random() * 4)]; // which icon to use
 	this.drawn = false;
 	this.position = {
 		// x: Math.floor(Math.random() * 2) * canvas.width, // 0 = left, 1 = right
@@ -131,3 +132,7 @@ function checkMove() {
 		enemyFish.moveUp = true;
 	}
 }
+
+exports.Fish = Fish;
+exports.spawnFish = spawnFish;
+exports.cleanFish = cleanFish;

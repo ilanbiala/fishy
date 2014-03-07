@@ -2,12 +2,16 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var routes = require('./routes');
-var http = require('http');
-var path = require('path');
+var express = require('express'),
+	routes = require('./routes'),
+	http = require('http'),
+	path = require('path');
 
-var app = express();
+var app = express(),
+	server = http.createServer(app),
+	io = require('socket.io').listen(server);
+
+var Fish = require('./files/fish.js');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -29,6 +33,26 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
-http.createServer(app).listen(app.get('port'), function () {
+server.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
+});
+
+console.log(Fish);
+
+var enemies;
+
+setInterval(function () {
+	Fish.spawnFish();
+	Fish.cleanFish();
+}, 5);
+
+io.set('loglevel', 10);
+io.sockets.on('connection', function (socket) {
+	console.log(enemies);
+	socket.on('update', function (data) {
+		console.log(data);
+		socket.emit('updates', {
+			enemies: data
+		});
+	});
 });
