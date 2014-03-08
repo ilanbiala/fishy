@@ -12,20 +12,11 @@ function renderCanvas() {
 	ctx.drawImage(enemyFish.symbol, enemyFish.position.x, enemyFish.position.y);
 	for (var i = 0; i < enemies.length; i++) {
 		var currentFish = new Fish();
-		currentFish.mass = enemies[i].mass;
-		currentFish.acceleration = enemies[i].acceleration;
-		currentFish.deceleration = enemies[i].deceleration;
-		currentFish.drawn = enemies[i].drawn;
-		currentFish.icon = enemies[i].icon || enemies[i].image;
-		currentFish.maxSpeed = enemies[i].maxSpeed;
-		currentFish.moveDown = enemies[i].moveDown;
-		currentFish.moveLeft = enemies[i].moveLeft;
-		currentFish.moveRight = enemies[i].moveRight;
-		currentFish.moveUp = enemies[i].moveUp;
-		currentFish.orientation = enemies[i].orientation;
-		currentFish.position = enemies[i].position;
-		currentFish.xSpeed = enemies[i].xSpeed;
-		currentFish.ySpeed = enemies[i].ySpeed;
+		for (var key in enemies[i]) {
+			if (enemies[i].hasOwnProperty(key)) {
+				currentFish[key] = enemies[i][key];
+			}
+		}
 		currentFish.swim();
 		var image = new Image();
 		image.onload = function () {
