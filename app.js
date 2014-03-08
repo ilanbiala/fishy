@@ -8,10 +8,7 @@ var express = require('express'),
 	path = require('path');
 
 var app = express(),
-	server = http.createServer(app),
-	io = require('socket.io').listen(server);
-
-// var Fish = require('./files/fish.js');
+	server = http.createServer(app);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -35,21 +32,4 @@ app.get('/', routes.index);
 
 server.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
-});
-
-// var enemies;
-
-// setInterval(function () {
-// 	Fish.spawnFish();
-// 	Fish.cleanFish();
-// }, 5);
-
-io.set('loglevel', 10);
-io.sockets.on('connection', function (socket) {
-	socket.on('update', function (data) {
-		console.log(data);
-		socket.emit('updates', {
-			enemies: data
-		});
-	});
 });
