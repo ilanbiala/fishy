@@ -43,6 +43,9 @@ var enemies;
 
 setInterval(function () {
 	enemies = spawnFish();
+	for (var i = enemies.length - 1; i >= 0; i--) {
+		enemies[i].swim();
+	}
 	cleanFish();
 	console.log(enemies.length);
 }, 500);
@@ -51,7 +54,7 @@ io.set('loglevel', 10);
 io.sockets.on('connection', function (socket) {
 	setInterval(function () {
 		socket.emit('updates', {
-			enemies: [new Fish()]
+			enemies: enemies
 		});
 	}, 500);
 	socket.on('update', function (data) {

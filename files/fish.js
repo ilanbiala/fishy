@@ -198,6 +198,7 @@ function checkMove() {
 }
 
 module.exports = Fish;
+module.exports.swim = Fish.prototype.swim;
 module.exports.spawnFish = spawnFish;
 module.exports.cleanFish = cleanFish;
 // exports.enemies = enemies;

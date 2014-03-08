@@ -12,6 +12,8 @@ var canvas,
 	enemyFish = new Fish(),
 	socket = io.connect();
 
+var xyz = 0;
+
 $(document).ready(function () {
 	canvas = $('canvas')[0];
 	canvas.width = window.innerWidth;
@@ -37,6 +39,10 @@ $(document).ready(function () {
 		// });
 	}, 250);
 	socket.on('updates', function (data) {
+		xyz += 1;
+		if (xyz % 10 === 0) {
+			console.log(data);
+		}
 		enemies = data.enemies;
 	});
 	renderCanvas();
