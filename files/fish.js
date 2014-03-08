@@ -88,7 +88,7 @@ Fish.prototype.move = function () {
 };
 
 Fish.prototype.swim = function () {
-	this.position.x += Math.random() * 8 + 1; // 1 -> 15
+	this.position.x += Math.random() * 25 + 1; // 1 -> 25
 };
 
 function spawnFish() {
