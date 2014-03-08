@@ -11,7 +11,9 @@ var app = express(),
 	server = http.createServer(app),
 	io = require('socket.io').listen(server);
 
-// var Fish = require('./files/fish.js');
+var Fish = require('./files/fish.js'),
+	spawnFish = require('./files/fish.js').spawnFish,
+	cleanFish = require('./files/fish.js').cleanFish;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -37,19 +39,23 @@ server.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
-// var enemies;
+var enemies;
 
-// setInterval(function () {
-// 	Fish.spawnFish();
-// 	Fish.cleanFish();
-// }, 5);
+setInterval(function () {
+	enemies = spawnFish();
+	cleanFish();
+	console.log(enemies.length);
+}, 500);
 
 io.set('loglevel', 10);
 io.sockets.on('connection', function (socket) {
+	setInterval(function () {
+		socket.emit('updates', {
+			enemies: [new Fish()]
+		});
+	}, 500);
 	socket.on('update', function (data) {
 		console.log(data);
-		socket.emit('updates', {
-			enemies: data
-		});
+
 	});
 });

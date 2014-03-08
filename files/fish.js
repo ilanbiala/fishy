@@ -2,6 +2,12 @@ var fishSymbolArray = ['/images/fish1.png', '/images/fish2.png', '/images/fish3.
 var enemies = [];
 var cleaningFish = false;
 
+var canvas = {
+	width: 1920,
+	height: 1080
+};
+var enemies;
+
 function Fish() {
 	this.mass = Math.floor(Math.random() * 3 + 3); // 3 -> 6
 	this.acceleration = Math.floor(10 - Math.random() * this.mass); // 4 -> 9
@@ -10,8 +16,6 @@ function Fish() {
 	this.xSpeed = 0;
 	this.ySpeed = 0;
 	this.icon = fishSymbolArray[Math.floor(Math.random() * 4)]; // fish graphic
-	// this.symbol = new Image(); // set up the image
-	// this.symbol.src = fishSymbolArray[Math.floor(Math.random() * 4)]; // which icon to use
 	this.drawn = false;
 	this.position = {
 		// x: Math.floor(Math.random() * 2) * canvas.width, // 0 = left, 1 = right
@@ -38,13 +42,6 @@ Fish.prototype.toString = function () {
 };
 
 Fish.prototype.move = function () {
-	if (this.drawn) {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-	} else {
-		this.drawn = !this.drawn;
-		console.log('speed: ' + this.maxSpeed + ', acceleration: ' + this.acceleration + ', deceleration: ' + this.deceleration);
-	}
-
 	if (this.moveLeft) { // left key
 		this.xSpeed = Math.max(-this.maxSpeed - this.deceleration, this.xSpeed - this.acceleration - this.deceleration); // Increase speed unless at max
 		this.orientation = 0;
@@ -109,8 +106,9 @@ function spawnFish() {
 
 function cleanFish() {
 	for (var i = 0; i < enemies.length; i++) {
-		if (enemies[i].position.x > (canvas.width + 1000)) {
-			enemies.splice(i);
+		if (enemies[i].position.x > (canvas.width + 250)) {
+			enemies.splice(i, 1);
+			numberOfFish--;
 		}
 	}
 }
@@ -133,6 +131,7 @@ function checkMove() {
 	}
 }
 
-exports.Fish = Fish;
-exports.spawnFish = spawnFish;
-exports.cleanFish = cleanFish;
+module.exports = Fish;
+module.exports.spawnFish = spawnFish;
+module.exports.cleanFish = cleanFish;
+// exports.enemies = enemies;
